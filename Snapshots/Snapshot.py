@@ -64,7 +64,6 @@ def getsnapshot(editor, time, filename):
                         del lines[lineno-1]
                     else:
                         lines[lineno-1] = lines[lineno-1][:to_colno] + lines[lineno-1][from_colno:]
-            print(lines)
                     
     snapshot = "\n".join(lines)
     snapshot = snapshot.replace(r"\n", "\n")
@@ -72,7 +71,7 @@ def getsnapshot(editor, time, filename):
 
 Filename = "examplelog.txt"
 editor = str(46381712)
-time = timedelta(minutes = 5)
+time = datetime.now()
 
 snapshot = getsnapshot(editor, time, Filename)
 print (snapshot)
