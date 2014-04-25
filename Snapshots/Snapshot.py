@@ -29,7 +29,7 @@ def getsnapshot(editor, time, filename):
                 lineinfo = getlineinfo(line)
                 if(lineinfo['editor_id'] == editor and lineinfo['source']=='LoadEvent'):
                     lines=lineinfo['text'].split(r"\n")
-                elif (lineinfo['editor_id'] == editor and lineinfo['time']-firsttimestamp <= time):
+                elif (lineinfo['editor_id'] == editor and lineinfo['time']<= time):
                     lineno = int(lineinfo['position'].split(".")[0])
                     colno = int(lineinfo['position'].split(".")[1])
                     lineinfo['text'] = lineinfo['text'].replace(r"\t", " ")
@@ -38,14 +38,22 @@ def getsnapshot(editor, time, filename):
                         if(r"\n" in lineinfo['text']):
                             lines.append("")
                     else:
-                        lines[lineno-1] = lines[lineno-1][:colno-1] + lineinfo['text'] + lines[lineno-1][colno-1:]
-                        if(r"\n" in lineinfo['text']):
-                            lines.insert(lineno, lines[lineno-1].split(r"\n")[1])
+                        if(lineinfo['source'] == 'PasteEvent'):
+                            lines[lineno-1] = lines[lineno-1][:colno-1] + lineinfo['text'] + lines[lineno-1][colno-1:]
+                            insertedlines = lines[lineno-1].split(r"\n")
+                            insertedlines.reverse()
+                            for insertedline in insertedlines[:-1]:
+                                   lines.insert(lineno, insertedline)
                             lines[lineno-1] = lines[lineno-1].split(r"\n")[0]
+                        else:
+                            lines[lineno-1] = lines[lineno-1][:colno-1] + lineinfo['text'] + lines[lineno-1][colno-1:]
+                            if(r"\n" in lines[lineno-1]):
+                                lines.insert(lineno, lines[lineno-1].split(r"\n")[1])
+                                lines[lineno-1] = lines[lineno-1].split(r"\n")[0]
                                       
             elif(line[0:10] == "TextDelete"):
                 lineinfo = getlineinfo(line)
-                if (lineinfo['editor_id'] == editor and lineinfo['time']-firsttimestamp < time and lineinfo['source'] != 'LoadEvent'):
+                if (lineinfo['editor_id'] == editor and lineinfo['time']< time and lineinfo['source'] != 'LoadEvent'):
                     lineno = int(lineinfo['from_position'].split(".")[0])
                     from_colno = int(lineinfo['from_position'].split(".")[1])
                     to_colno = int(lineinfo['to_position'].split(".")[1])
@@ -56,7 +64,7 @@ def getsnapshot(editor, time, filename):
                         del lines[lineno-1]
                     else:
                         lines[lineno-1] = lines[lineno-1][:to_colno] + lines[lineno-1][from_colno:]
-                    
+            print(lines)
                     
     snapshot = "\n".join(lines)
     snapshot = snapshot.replace(r"\n", "\n")
