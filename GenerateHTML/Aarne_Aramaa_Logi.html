@@ -6,7 +6,8 @@
     <script type="text/javascript">
       google.load("visualization", "1", {packages:["corechart"]});
       google.setOnLoadCallback(drawChart);
-	  google.setOnLoadCallback(drawChart2);
+      google.setOnLoadCallback(drawChart2);
+      google.setOnLoadCallback(drawChart3);
       function drawChart() {
         var data = google.visualization.arrayToDataTable(
 		[['Time', 'euler1.py', 'pere_sissetulek.py', 'kuupaev.py', 'kahest_suurim.py', 'Homework1.py'], ['', 136, 0, 0, 0, 0], ['', 136, 0, 0, 0, 0], ['', 136, 533, 0, 0, 0], ['', 136, 533, 0, 0, 0], ['', 136, 533, 872, 0, 0], ['', 136, 533, 872, 0, 0], ['', 136, 533, 872, 135, 0], ['', 136, 533, 872, 135, 0], ['', 136, 533, 872, 135, 204], ['', 136, 533, 872, 135, 200], ['', 136, 533, 872, 135, 202], ['', 136, 533, 872, 135, 213], ['', 136, 533, 872, 135, 223], ['', 136, 533, 872, 135, 233], ['', 136, 533, 872, 135, 243], ['', 136, 533, 872, 135, 245], ['', 136, 533, 872, 135, 276], ['', 136, 533, 872, 135, 278], ['', 136, 533, 872, 135, 292], ['', 136, 533, 872, 135, 332], ['', 136, 533, 872, 135, 340], ['', 136, 533, 872, 135, 342], ['', 136, 533, 872, 135, 344], ['', 136, 533, 872, 135, 355], ['', 136, 533, 872, 135, 348], ['', 136, 533, 872, 135, 356], ['', 136, 533, 872, 135, 355], ['', 136, 533, 872, 135, 367], ['', 136, 533, 872, 135, 371], ['', 136, 533, 872, 135, 383], ['', 136, 533, 872, 135, 387], ['', 136, 533, 872, 135, 384], ['', 136, 533, 872, 135, 386], ['', 136, 533, 872, 135, 396], ['', 136, 533, 872, 135, 395], ['', 136, 533, 872, 135, 402], ['', 136, 533, 872, 135, 409], ['', 136, 533, 872, 135, 407], ['', 136, 533, 872, 135, 418], ['', 136, 533, 872, 135, 422], ['', 136, 533, 872, 135, 427], ['', 136, 533, 872, 135, 436], ['', 136, 533, 872, 135, 435], ['', 136, 533, 872, 135, 446], ['', 136, 533, 872, 135, 445], ['', 136, 533, 872, 135, 447], ['', 136, 533, 872, 135, 450], ['', 136, 533, 872, 135, 451], ['', 136, 533, 872, 135, 450], ['', 136, 533, 872, 135, 457], ['', 136, 533, 872, 135, 450], ['', 136, 533, 872, 135, 456], ['', 136, 533, 872, 135, 455], ['', 136, 533, 872, 135, 462], ['', 136, 533, 872, 135, 472], ['', 136, 533, 872, 135, 473], ['', 136, 533, 872, 135, 472], ['', 136, 533, 872, 135, 477], ['', 136, 533, 872, 135, 486], ['', 136, 533, 872, 135, 491], ['', 136, 533, 872, 135, 459], ['', 136, 533, 872, 135, 412], ['', 136, 533, 872, 135, 401], ['', 136, 533, 872, 135, 384], ['', 136, 533, 872, 135, 373]]);
@@ -25,19 +26,40 @@
           ['Written',     317],
           ['Pasted',      0],
         ]);
+
         var options = {
           title: 'Ratio of written and pasted code'
         };
+
         var chart = new google.visualization.PieChart(document.getElementById('Pie_chart'));
         chart.draw(data, options);
-      }	  
+      }
+
+       function drawChart3() {
+        var data = google.visualization.arrayToDataTable(
+
+        [['Time', 'euler1.py', 'pere_sissetulek.py', 'kuupaev.py', 'kahest_suurim.py', 'Homework1.py'], ['2014-04-23 18:20:34', 0, 0, 0, 0, 6], ['2014-04-23 18:22:04', 0, 0, 0, 0, 11], ['2014-04-23 18:27:58', 0, 0, 0, 0, 12]]
+
+        );
+
+        var options = {
+          title: 'Ammount of nodes per run',
+          hAxis: {title: 'Run time', titleTextStyle: {color: 'red'}}
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('Column_chart'));
+        chart.draw(data, options);
+      }
+	  
     </script>
   </head>
   <body>
   <div class=bodyc>
 	<div class=upper>
 	<div class=header> <h1>Aarne_Aramaa_Logi.txt</h1></div>
-	</div>	
+	</div>
+	
+	
 	<div class=middle>
 	<div class=data>
 	<TABLE>
@@ -62,7 +84,8 @@
 	</TABLE>
 	</div>
 	
-    <div id="Line_chart" class=chart "></div>
+        <div id="Line_chart" class=chart "></div>
+        <div id="Column_chart" class=chart></div>
 	<div id="Pie_chart" class=chart></div>
 	</div>
 	</div>
