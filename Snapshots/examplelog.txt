@@ -15,28 +15,28 @@ TextInsert(editor_id='46327008', position='1.4', source='LoadEvent', tags="('top
 Command(cmd_id='new_file', source='shortcut') at 2014-04-21T17:39:37.681180
 NewFile(editor_id='46381712') at 2014-04-21T17:39:37.685180
 EditorGetFocus(editor_id='46381712') at 2014-04-21T17:39:38.215210
-TextInsert(editor_id='46381712', position='1.1', source='KeyPressEvent', tags='None', text='#This is a comment\n') at 2014-04-21T17:39:44.906593
-TextInsert(editor_id='46381712', position='2.1', source='KeyPressEvent', tags='None', text='def ') at 2014-04-21T17:39:48.497799
+TextInsert(editor_id='46381712', position='1.0', source='KeyPressEvent', tags='None', text='#This is a comment\n') at 2014-04-21T17:39:44.906593
+TextInsert(editor_id='46381712', position='2.0', source='KeyPressEvent', tags='None', text='def ') at 2014-04-21T17:39:48.497799
 TextInsert(editor_id='46381712', position='2.5', source='KeyPressEvent', tags='None', text='func(a, b):\n') at 2014-04-21T17:39:57.938339
-TextInsert(editor_id='46381712', position='3.1', source='KeyPressEvent', tags='None', text='\t') at 2014-04-21T17:39:59.123406
+TextInsert(editor_id='46381712', position='3.0', source='KeyPressEvent', tags='None', text='\t') at 2014-04-21T17:39:59.123406
 TextInsert(editor_id='46381712', position='3.2', source='KeyPressEvent', tags='None', text='if(a<b):\n') at 2014-04-21T17:40:14.555289
-TextInsert(editor_id='46381712', position='4.1', source='KeyPressEvent', tags='None', text='\t\tprint(a<') at 2014-04-21T17:40:18.201498
+TextInsert(editor_id='46381712', position='4.0', source='KeyPressEvent', tags='None', text='\t\tprint(a<') at 2014-04-21T17:40:18.201498
 TextDelete(editor_id='46381712', from_position='4.10', source='KeyPressEvent', to_position='4.8') at 2014-04-21T17:40:19.411567
 TextInsert(editor_id='46381712', position='4.9', source='KeyPressEvent', tags='None', text='"a>') at 2014-04-21T17:40:20.588634
 TextDelete(editor_id='46381712', from_position='4.11', source='KeyPressEvent', to_position='4.10') at 2014-04-21T17:40:21.316676
 TextInsert(editor_id='46381712', position='4.11', source='KeyPressEvent', tags='None', text='<b)') at 2014-04-21T17:40:23.492800
 TextDelete(editor_id='46381712', from_position='4.13', source='KeyPressEvent', to_position='4.12') at 2014-04-21T17:40:23.837820
 TextInsert(editor_id='46381712', position='4.13', source='KeyPressEvent', tags='None', text='")\n') at 2014-04-21T17:40:25.954941
-TextInsert(editor_id='46381712', position='5.1', source='KeyPressEvent', tags='None', text='\n') at 2014-04-21T17:40:26.558976
-TextInsert(editor_id='46381712', position='6.1', source='KeyPressEvent', tags='None', text='a = 10\n') at 2014-04-21T17:40:30.612207
-TextInsert(editor_id='46381712', position='7.1', source='KeyPressEvent', tags='None', text='\n') at 2014-04-21T17:40:31.076234
+TextInsert(editor_id='46381712', position='5.0', source='KeyPressEvent', tags='None', text='\n') at 2014-04-21T17:40:26.558976
+TextInsert(editor_id='46381712', position='6.0', source='KeyPressEvent', tags='None', text='a = 10\n') at 2014-04-21T17:40:30.612207
+TextInsert(editor_id='46381712', position='7.0', source='KeyPressEvent', tags='None', text='\n') at 2014-04-21T17:40:31.076234
 TextDelete(editor_id='46381712', from_position='8.0', source='KeyPressEvent', to_position='8.-1') at 2014-04-21T17:40:31.981286
-TextInsert(editor_id='46381712', position='7.1', source='KeyPressEvent', tags='None', text='b=') at 2014-04-21T17:40:33.076348
-TextDelete(editor_id='46381712', from_position='7.2', source='KeyPressEvent', to_position='7.1') at 2014-04-21T17:40:33.361365
+TextInsert(editor_id='46381712', position='7.0', source='KeyPressEvent', tags='None', text='b=') at 2014-04-21T17:40:33.076348
+TextDelete(editor_id='46381712', from_position='7.3', source='KeyPressEvent', to_position='7.1') at 2014-04-21T17:40:33.361365
 TextInsert(editor_id='46381712', position='7.2', source='KeyPressEvent', tags='None', text=' = ') at 2014-04-21T17:40:34.342421
 TextInsert(editor_id='46381712', position='7.5', source='KeyPressEvent', tags='None', text='20\n') at 2014-04-21T17:40:39.587721
-TextInsert(editor_id='46381712', position='8.1', source='KeyPressEvent', tags='None', text='\n') at 2014-04-21T17:40:39.932740
-TextInsert(editor_id='46381712', position='9.1', source='KeyPressEvent', tags='None', text='func(a, b)') at 2014-04-21T17:40:42.626895
+TextInsert(editor_id='46381712', position='8.0', source='KeyPressEvent', tags='None', text='\n') at 2014-04-21T17:40:39.932740
+TextInsert(editor_id='46381712', position='9.0', source='KeyPressEvent', tags='None', text='func(a, b)') at 2014-04-21T17:40:42.626895
 Copy(editor_id='46381712') at 2014-04-21T17:40:49.642296
 EditorLoseFocus(editor_id='46381712') at 2014-04-21T17:40:51.246388
 EditorGetFocus(editor_id='46381712') at 2014-04-21T17:40:53.910540

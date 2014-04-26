@@ -19,7 +19,7 @@ def getsnapshot(editor, time, filename):
     snapshot = ""
     lines = []
     sourceline = ""
-    with open(filename) as logfile:
+    with open(filename, encoding='utf-8') as logfile:
         firsttimestamp = None
         for line in logfile:
             if(firsttimestamp == None):
@@ -31,14 +31,21 @@ def getsnapshot(editor, time, filename):
                     lines=lineinfo['text'].split(r"\n")
                 elif (lineinfo['editor_id'] == editor and lineinfo['time']<= time):
                     lineno = int(lineinfo['position'].split(".")[0])
-                    colno = int(lineinfo['position'].split(".")[1])
+                    colno = int(lineinfo['position'].split(".")[1])+1
+                    if(lineinfo['text'] == r"\n"):
+                        colno -= 1
                     lineinfo['text'] = lineinfo['text'].replace(r"\t", " ")
+                    lineinfo['text'] = lineinfo['text'].replace(r"\n", r" \n")
                     if(lineno > len(lines)):
                         lines.append(lineinfo['text'].replace(r"\n", ""))
+                        """
                         if(r"\n" in lineinfo['text']):
-                            lines.append("")
+                            lines[-1] = lines[-1] + ""
+                            print("Appending")
+                            lines.append("asd")
+                        """
                     else:
-                        if(lineinfo['source'] == 'PasteEvent'):
+                        if(lineinfo['source'] == 'PasteEvent' or lineinfo['source'] == 'RedoEvent' or lineinfo['source'] == 'UndoEvent'):
                             lines[lineno-1] = lines[lineno-1][:colno-1] + lineinfo['text'] + lines[lineno-1][colno-1:]
                             insertedlines = lines[lineno-1].split(r"\n")
                             insertedlines.reverse()
@@ -49,21 +56,38 @@ def getsnapshot(editor, time, filename):
                             lines[lineno-1] = lines[lineno-1][:colno-1] + lineinfo['text'] + lines[lineno-1][colno-1:]
                             if(r"\n" in lines[lineno-1]):
                                 lines.insert(lineno, lines[lineno-1].split(r"\n")[1])
-                                lines[lineno-1] = lines[lineno-1].split(r"\n")[0]
-                                      
+                                lines[lineno-1] = lines[lineno-1].split(r"\n")[0]                  
             elif(line[0:10] == "TextDelete"):
-                lineinfo = getlineinfo(line)
+                lineinfo = getlineinfo(line)     
                 if (lineinfo['editor_id'] == editor and lineinfo['time']< time and lineinfo['source'] != 'LoadEvent'):
                     lineno = int(lineinfo['from_position'].split(".")[0])
+                    to_lineno = int(lineinfo['to_position'].split(".")[0])
                     from_colno = int(lineinfo['from_position'].split(".")[1])
                     to_colno = int(lineinfo['to_position'].split(".")[1])
-                    if(lineinfo['source'] == 'UndoEvent' or lineinfo['source'] == 'RedoEvent'):
-                        from_colno += 1
-                    if(to_colno == -1):
-                        lines[lineno-2] = lines[lineno-2] + lines[lineno-1][from_colno:]
-                        del lines[lineno-1]
+                    if(lineno != to_lineno):
+                        if(len(lines)!=0):
+                            lines[lineno-1] = lines[lineno-1][:from_colno] + lines[to_lineno-1][to_colno:]
+                            if(to_colno != len(lines[to_lineno-1])):
+                                lines[to_lineno-1] = lines[to_lineno-1][to_colno:]
+                            del lines[to_lineno-1]
+                            #Delete mid lines
+                            for index in reversed(range(lineno, to_lineno-1)):
+                                del lines[index]    
                     else:
-                        lines[lineno-1] = lines[lineno-1][:to_colno] + lines[lineno-1][from_colno:]
+                        if(from_colno < to_colno):
+                            from_colno, to_colno = to_colno, from_colno
+                        if(lineinfo['source'] == 'UndoEvent'):
+                            from_colno += 1
+                        if(to_colno == -1):
+                            lines[lineno-2] = lines[lineno-2] + lines[lineno-1]
+                            del lines[lineno-1]
+                        else:
+                            if(lineno < len(lines) and lines[lineno-1][to_colno:from_colno+1] == ' ' and from_colno == len(lines[lineno-1])):
+                                lines[lineno-2] = lines[lineno-1][:to_colno] + lines[lineno-1][from_colno:]
+                                lines[lineno-2] = lines[lineno-1] + lines[lineno]
+                                del lines[lineno-1]
+                            else:
+                                lines[lineno-1] = lines[lineno-1][:to_colno] + lines[lineno-1][from_colno:]
                     
     snapshot = "\n".join(lines)
     snapshot = snapshot.replace(r"\n", "\n")
