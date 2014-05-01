@@ -1,0 +1,106 @@
+.header{
+height: 150px;
+position: relative;
+vertical-align:top;
+background-color: #BADDF0;
+overflow:hidden;
+text-align:center;
+}
+
+.upper
+{
+
+}
+
+.corner{
+width:200;
+height:200;
+background-color: #BADDF0;
+position:relative;
+float:left;
+}
+
+.leftside{
+width:200;
+height:95vh;
+background-color: #BADDF0;
+float:left;
+overflow:auto;
+}
+
+.middle
+{
+margin-top:0px;
+height: 80vh;
+overflow-y:scroll;
+text-align:center;
+}
+
+.chart
+{
+width: 900px; 
+height: 500px;
+margin:0 auto;
+}
+.data
+{
+width:900px;
+height: 200px;
+margin:0 auto;
+overflow:hidden;
+}
+
+.stat
+{
+float:left;
+}
+
+.statnr
+{
+font-size: 55;
+}
+
+.bodyc
+{
+height: 97vh;
+overflow:hidden;
+}
+
+.key
+{
+text-align:left;
+font-size: 20;
+}
+
+.value
+{
+text-align:center;
+font-size: 30;
+}
+
+h1{
+font-size: 75;
+font-family: arial;
+background-color: #BADDF0;
+text-decoration:none;
+color:#000000;
+}
+
+a{
+font-size : 35;
+text-decoration:none;
+font-family:arial;
+color:#000000;
+}
+
+body
+{
+font-size: 40;
+font-family:arial;
+color:#000000;
+}
+
+td
+{
+text-align:center;
+}
