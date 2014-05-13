@@ -1,0 +1,93 @@
+
+<html>
+  <head>
+  <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      google.setOnLoadCallback(drawChart2);
+      google.setOnLoadCallback(drawChart3);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable(
+		[['Time', 'euler1.py', 'pere_sissetulek.py', 'kuupaev.py', 'kahest_suurim.py', 'testylesanne.py'], ['2014-04-20 16:23:25', 136, 533, 872, 191, 167], ['2014-04-20 16:24:31', 136, 533, 872, 191, 338], ['2014-04-20 16:25:33', 136, 533, 872, 191, 437], ['2014-04-20 16:26:36', 136, 533, 872, 191, 583], ['2014-04-20 16:27:41', 136, 533, 872, 191, 672], ['2014-04-20 16:28:41', 136, 533, 872, 191, 697], ['2014-04-20 16:29:45', 136, 533, 872, 191, 777]]);
+        var options = {
+          title: 'Code additions in length over time'
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('Line_chart'));
+        chart.draw(data, options);
+		var chart2 = new google.visualization.LineChart(document.getElementById('second_chart'));
+        chart2.draw(data, options);
+      }
+	  function drawChart2() {
+        var data = google.visualization.arrayToDataTable([
+          ['Source', 'Characters'],
+          ['Written',     777],
+          ['Pasted',      0],
+        ]);
+
+        var options = {
+          title: 'Ratio of written and pasted code'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('Pie_chart'));
+        chart.draw(data, options);
+      }
+
+       function drawChart3() {
+        var data = google.visualization.arrayToDataTable(
+
+        [['Time', 'If', 'While', 'For', 'Assign', 'Function definitions'], ['testylesanne.py \n2014-04-20 16:24:11', 0, 0, 0, 0, 1], ['testylesanne.py \n2014-04-20 16:24:34', 0, 0, 0, 0, 0], ['testylesanne.py \n2014-04-20 16:25:35', 2, 0, 0, 2, 1], ['testylesanne.py \n2014-04-20 16:26:03', 2, 1, 0, 3, 1], ['testylesanne.py \n2014-04-20 16:26:53', 2, 1, 2, 3, 1], ['testylesanne.py \n2014-04-20 16:27:30', 3, 1, 2, 3, 2], ['testylesanne.py \n2014-04-20 16:28:47', 0, 0, 0, 0, 0], ['testylesanne.py \n2014-04-20 16:29:21', 3, 2, 2, 7, 2], ['testylesanne.py \n2014-04-20 16:29:42', 3, 1, 2, 3, 2], ['testylesanne.py \n2014-04-20 16:30:12', 4, 1, 2, 3, 3], ['testylesanne.py \n2014-04-20 16:30:30', 4, 1, 2, 3, 3], ['testylesanne.py \n2014-04-20 16:30:37', 3, 1, 2, 3, 2]]
+
+        );
+
+        var options = {
+          title: 'Ammount of nodes per run',
+          hAxis: {title: 'Run time', titleTextStyle: {color: 'red'}}
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('Column_chart'));
+        chart.draw(data, options);
+      }
+	  
+    </script>
+  </head>
+  <body>
+  <div class=bodyc>
+	<div class=upper>
+	<div class=header> <h1>example log.txt</h1></div>
+	</div>
+	<div class=middle>
+	<div class=data>
+	<TABLE>
+	<TR>
+	<TD class=key>Number of runs:</TD>
+	<TD class=value>12</TD>
+	<TD class=key> Number of focus loss: </TD>
+	<TD class=value>10</TD>
+	</TR>
+	<TR>
+	<TD class=key> Number of unsuccessful runs: </TD>
+	<TD class=value>2 </TD>
+	<TD> </TD>
+	<TD> </TD>
+	</TR>
+	<TR>
+	<TD class=key>Start date:</TD>
+	<TD class=value>2014-04-20 16:23:25</TD>
+	<TD class=key>End date:</TD>
+	<TD class=value>2014-04-20 16:30:37</TD>
+	</TR>
+	</TABLE>
+	</div>
+	
+        <div id="Line_chart" class=chart "></div>
+        <div id="Column_chart" class=chart></div>
+	<div id="Pie_chart" class=chart></div>
+	</div>
+	</div>
+
+	
+  </body>
+</html>
