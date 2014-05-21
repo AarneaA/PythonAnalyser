@@ -16,7 +16,7 @@ def getlineinfo(line):
     linedict['class'] = eventclass
     linedict['time'] = timestamp
     return linedict
-
+#Temporary workaround
 def getlineinfotags(line):
     linedict = {}
     timestamp = line[-27:-1]
@@ -62,29 +62,31 @@ def getsnapshot(editor, time, filename):
                 elif (lineinfo['editor_id'] == editor and lineinfo['time']<= time):
                     lineno = int(lineinfo['position'].split(".")[0])
                     colno = int(lineinfo['position'].split(".")[1])+1
-                    if(lineinfo['text'] == r"\n"):
+                    if(lineinfo['text'] == r"\n" or lineinfo['text'] == r"\n    "):
                         colno -= 1
-                    lineinfo['text'] = lineinfo['text'].replace(r"\t", " ")
-                    lineinfo['text'] = lineinfo['text'].replace(r"\n", r" \n")
+                    lineinfo['text'] = lineinfo['text'].replace(r"\t", "    ")
+                    lineinfo['text'] = lineinfo['text'].replace(r"\n", " \n")
+                    lineinfo['text'] = lineinfo['text'].replace("\ \n", r"\n")
+                    lineinfo['text'] = lineinfo['text'].replace(r"\\", "\\")
                     if(lineno > len(lines)):
-                        for line in reversed(lineinfo['text'].split(r"\n")):
+                        for line in reversed(lineinfo['text'].splitlines()):
                             lines.insert(lineno-1, line)
                     else:
                         if(lineinfo['source'] == 'PasteEvent' or lineinfo['source'] == 'RedoEvent' or lineinfo['source'] == 'UndoEvent'):
                             lines[lineno-1] = lines[lineno-1][:colno-1] + lineinfo['text'] + lines[lineno-1][colno-1:]
-                            insertedlines = lines[lineno-1].split(r"\n")
+                            insertedlines = lines[lineno-1].splitlines()
                             insertedlines.reverse()
                             for insertedline in insertedlines[:-1]:
                                    lines.insert(lineno, insertedline)
-                            lines[lineno-1] = lines[lineno-1].split(r"\n")[0]
+                            lines[lineno-1] = lines[lineno-1].splitlines()[0]
                         else:
                             lines[lineno-1] = lines[lineno-1][:colno-1] + lineinfo['text'] + lines[lineno-1][colno-1:]
-                            if(r"\n" in lines[lineno-1]):
-                                lines.insert(lineno, lines[lineno-1].split(r"\n")[1])
-                                lines[lineno-1] = lines[lineno-1].split(r"\n")[0]                  
+                            if("\n" in lines[lineno-1]):
+                                lines.insert(lineno, lines[lineno-1].splitlines()[1])
+                                lines[lineno-1] = lines[lineno-1].splitlines()[0]                  
             elif(line[0:10] == "TextDelete"):
                 lineinfo = getlineinfo(line)     
-                if (lineinfo['editor_id'] == editor and lineinfo['time']< time and lineinfo['source'] != 'LoadEvent'):
+                if (lineinfo['editor_id'] == editor and lineinfo['time']< time and lineinfo['source'] != 'LoadEvent'):  
                     lineno = int(lineinfo['from_position'].split(".")[0])
                     to_lineno = int(lineinfo['to_position'].split(".")[0])
                     from_colno = int(lineinfo['from_position'].split(".")[1])
@@ -115,10 +117,9 @@ def getsnapshot(editor, time, filename):
                                 del lines[to_lineno]
                             else:
                                 lines[lineno-1] = lines[lineno-1][:to_colno] + lines[lineno-1][from_colno:]
-                                
-                    
+
     snapshot = "\n".join(lines)
-    snapshot = snapshot.replace(r"\n", "\n")
+    snapshot = snapshot.replace("\\n", r"\n")
     return snapshot
 
 def countnodes(tree):
@@ -258,68 +259,6 @@ def getstats(logfilename):
     erramt = erramt + (synerramt - erramt)
     return stats, runstats, pasteamt, typeamt, losefocusamt, runamt, erramt, starttime, endtime
 
-def getstatsold(editor, logfilename):
-    codeammount = []
-    stats = [["Time", "Code length", "Code deletions"]]
-    firsttimestamp = None
-    lasttimestamp = None
-    filename = "untitled"
-    pasteamt = 0
-    typeamt = 0
-    losefocusamt = 0
-    runamt = 0
-    erramt = 0
-    with open("../user_logs/" + str(logfilename)) as logfile:
-        for line in logfile:
-            lineinfo = getlineinfo(line)
-            if('editor_id' in lineinfo and editor == lineinfo['editor_id']):
-                lasttimestamp = lineinfo['time']
-                if(firsttimestamp == None):
-                    firsttimestamp =lineinfo['time']
-            if(line[0:10] == "TextInsert"):
-                if(lineinfo['tags'] == 'None'):
-                    if(editor == lineinfo['editor_id']):
-                        if(lineinfo['source'] == 'PasteEvent'):
-                            pasteamt += len(lineinfo['text'])
-                        elif(lineinfo['source'] == 'KeyPressEvent'):
-                            typeamt += len(lineinfo['text'])
-                        
-                        if (len(codeammount) == 0):
-                            codeammount.append(len(lineinfo['text']))
-                        else:
-                            codeammount.append(codeammount[-1]+len(lineinfo['text']))
-                else:
-                    lineinfotags = getlineinfotags(line)
-                    if('error' in lineinfotags['tags']):
-                        erramt += 1
-            elif(line[0:10] == "TextDelete"):
-                #lineinfo = getlineinfo(line)
-                if(editor == lineinfo['editor_id']):
-                    if (len(codeammount) == 0):
-                        pass
-                    else:
-                        from_colno = int(lineinfo['from_position'].split(".")[1])
-                        to_colno = int(lineinfo['to_position'].split(".")[1])
-                        codeammount.append(codeammount[-1]-(from_colno-to_colno))
-            #Get file name for editor
-            elif(line[0:4] == 'Load' or line[0:6] == 'SaveAs'):
-                #lineinfo = getlineinfo(line)      
-                if(lineinfo['editor_id'] == editor):
-                    filename = lineinfo['filename'].split(r"\\")[-1]
-            elif(lineinfo['class'] == 'EditorLoseFocus'):
-                losefocusamt += 1
-            elif(lineinfo['class'] == 'Command' and (lineinfo['cmd_id'] == 'run_current_script' or lineinfo['cmd_id'] == 'debug_current_script')):
-                runamt += 1
-    for ammount in codeammount:
-        if(len(stats)>1):
-            if(stats[-1][1] > ammount):
-                stats.append(["", ammount, stats[-1][1]-ammount])
-            else:
-                stats.append(["", ammount, 0])
-        else:
-            stats.append([str(firsttimestamp), ammount, 0])
-    stats[-1][0] = str(lasttimestamp)
-    return filename, stats, pasteamt, typeamt, losefocusamt, runamt, erramt, firsttimestamp, lasttimestamp
 
 def geteditorids(logfilename):
     editors = []
