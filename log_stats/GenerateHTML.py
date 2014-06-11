@@ -69,31 +69,42 @@ def getsnapshot(editor, time, filename):
                     lineinfo['text'] = lineinfo['text'].replace("\ \n", r"\n")
                     lineinfo['text'] = lineinfo['text'].replace(r"\\", "\\")
                     if(lineno > len(lines)):
+                        #for line in reversed(lineinfo['text'].split(r"\n")):
                         for line in reversed(lineinfo['text'].splitlines()):
                             lines.insert(lineno-1, line)
+
                     else:
                         if(lineinfo['source'] == 'PasteEvent' or lineinfo['source'] == 'RedoEvent' or lineinfo['source'] == 'UndoEvent'):
                             lines[lineno-1] = lines[lineno-1][:colno-1] + lineinfo['text'] + lines[lineno-1][colno-1:]
+                            #insertedlines = lines[lineno-1].split(r"\n")
                             insertedlines = lines[lineno-1].splitlines()
                             insertedlines.reverse()
                             for insertedline in insertedlines[:-1]:
                                    lines.insert(lineno, insertedline)
+                            #lines[lineno-1] = lines[lineno-1].split(r"\n")[0]
                             lines[lineno-1] = lines[lineno-1].splitlines()[0]
                         else:
                             lines[lineno-1] = lines[lineno-1][:colno-1] + lineinfo['text'] + lines[lineno-1][colno-1:]
                             if("\n" in lines[lineno-1]):
-                                lines.insert(lineno, lines[lineno-1].splitlines()[1])
+
+                                #Changed from splitlines to split \n
+                                lines.insert(lineno, lines[lineno-1].split("\n")[1])
                                 lines[lineno-1] = lines[lineno-1].splitlines()[0]                  
             elif(line[0:10] == "TextDelete"):
                 lineinfo = getlineinfo(line)     
-                if (lineinfo['editor_id'] == editor and lineinfo['time']< time and lineinfo['source'] != 'LoadEvent'):  
+                if (lineinfo['editor_id'] == editor and lineinfo['time']< time and lineinfo['source'] != 'LoadEvent'):         
                     lineno = int(lineinfo['from_position'].split(".")[0])
                     to_lineno = int(lineinfo['to_position'].split(".")[0])
+                    #lineno, to_lineno = to_lineno, lineno
                     from_colno = int(lineinfo['from_position'].split(".")[1])
                     to_colno = int(lineinfo['to_position'].split(".")[1])
-                    while(to_colno > len(lines[lineno-1]) and to_lineno < len(lines)):
-                        to_colno -= len(lines[to_lineno-1])
-                        to_lineno += 1
+                    #Try catch in case of empty lines list
+                    try:
+                        while(to_colno > len(lines[lineno]) and to_lineno < len(lines)):
+                            to_colno -= len(lines[to_lineno-1])
+                            to_lineno += 1
+                    except:
+                        pass
                     if(lineno != to_lineno):
                         if(len(lines)!=0):
                             lines[lineno-1] = lines[lineno-1][:from_colno] + lines[to_lineno-1][to_colno:]
@@ -117,7 +128,7 @@ def getsnapshot(editor, time, filename):
                                 del lines[to_lineno]
                             else:
                                 lines[lineno-1] = lines[lineno-1][:to_colno] + lines[lineno-1][from_colno:]
-
+                    
     snapshot = "\n".join(lines)
     snapshot = snapshot.replace("\\n", r"\n")
     return snapshot
@@ -127,8 +138,6 @@ def countnodes(tree):
     for key, value in vars(tree).items():
         if(isinstance(value, list)):
             for listValue in value:
-                #print(listValue.__class__.__name__)
-                #countnodes(listValue)
                 if(isinstance(listValue, ast.If)):
                     ifcount += 1
                 elif(isinstance(listValue, ast.While)):
@@ -243,8 +252,6 @@ def getstats(logfilename):
                     try:
                         ifcount, whilecount, forcount, assigncount, funcdefcount = countnodes(ast.parse(getsnapshot(currenteditor, lineinfo['time'], logfilename)))
                         addition[1], addition[2], addition[3], addition[4], addition[5] = ifcount, whilecount, forcount, assigncount, funcdefcount
-                        #addition[editors.index(currenteditor)+1] += countnodes(ast.parse(getsnapshot(currenteditor, lineinfo['time'], logfilename)))
-                        #print("Parse success")
                     except:
                         synerramt += 1
                 except ValueError:
@@ -411,18 +418,9 @@ statfiles = listdir("./")
 for Logfilename in logfiles:
     editors = geteditorids(Logfilename)
 
-        #print(getstats(id,Logfilename))
-        #print(identifier)
     if (str(Logfilename[:-4])+".html" not in statfiles):
         stats, runstats, pasteamt, typeamt, losefocusamt, runamt, erramt, startdate, enddate = getstats("../user_logs/" + Logfilename)
         generatehtml(stats, pasteamt, typeamt, losefocusamt, runamt, erramt, startdate, enddate, Logfilename)
-        #print(generatehtml(filename, stats, pasteamt, typeamt, losefocusamt, runamt, startdate, enddate, editors))
-        #importanttimes = getimportanttimes(identifier, Logfilename)
-        #print(runstats)
-        """for time in importanttimes:
-                try:
-                    print(ast.dump(ast.parse(getsnapshot(identifier, time, Logfilename))))
-                except SyntaxError:
-                    print("SYNER")"""
+
 generateindex(logfiles)
-#print(ast.parse(getsnapshot("45030032", datetime.now(), "../user_logs/SimpleProgramLog.txt")))
+
